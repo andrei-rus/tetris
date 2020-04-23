@@ -7,6 +7,7 @@ export class Cell {
         this.context = this.canvas.getContext("2d");
         this.width = 30;
         this.height = 30;
+        this.isEmpty = true;
     }
 
     draw(color) {

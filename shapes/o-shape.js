@@ -1,37 +1,20 @@
-export class O {
+import { Shape } from "./shape.js";
+
+export class O extends Shape {
     constructor(row, column, cells) {
-        this.row = row;
-        this.column = column;
-        this.cells = cells;
-        //TODO - why const.
+        super(row, column, cells, 'yellow');
         this.template = [
-            this.cells[this.row][this.column],
-            this.cells[this.row][this.column + 1],
-            this.cells[this.row + 1][this.column],
-            this.cells[this.row + 1][this.column + 1]
+            [1, 1],
+            [1, 1]
         ];
-        this.color = 'yellow';
     }
 
-    draw() {
-        this.template.forEach(cell => {
-            cell.draw(this.color);
-        });
-    }
+    getTemplates() {
+        const template_1 = [
+            [1, 1],
+            [1, 1]
+        ];
 
-    moveUp() {
-        this.row--;
-    }
-
-    moveDown() {
-        this.row++;
-    }
-
-    moveLeft() {
-        this.column--;
-    }
-
-    moveRight() {
-        this.column++;
+        return [template_1]
     }
 }
