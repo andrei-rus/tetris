@@ -1,0 +1,40 @@
+body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(black, transparent);
+}
+
+#left {
+    order: 1;
+    text-transform: uppercase;
+    text-orientation: upright;
+    writing-mode: vertical-lr;
+    font-size: 25px;
+}
+
+#middle {
+    order: 2;
+}
+
+#right {
+    order: 3;
+    flex-direction: column;
+    padding: 20px;
+}
+
+#nextShape {
+    border: 2px solid black;
+}
+
+#content {
+    border: 5px solid white;
+}
+
+p {
+    border: solid;
+    text-align: center;
+    width: 65px;
+    color: white;
+}

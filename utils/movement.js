@@ -1,4 +1,5 @@
 import { Validator } from "./validator.js";
+import { DOMHelper } from "./DOMHelper.js";
 
 export class Movement {
     constructor(shape, cells) {
@@ -12,13 +13,18 @@ export class Movement {
         this.shape.row--;
     }
 
-    down() {
-        const row = this.shape.row;
-        const column = this.shape.column;
+    down(intervalId) {
+        const { row, column } = this.shape;
+
         this.shape.clear();
         const nextNotAvailable = this.validator.checkNext(row + 1, column);
         if (nextNotAvailable) {
             this.shape.draw();
+            if (row === 0) {
+                DOMHelper.enableStartButton();
+                console.log('Game Over');
+                clearInterval(intervalId);
+            }
             this.canMove = false;
             return;
         }
@@ -28,8 +34,12 @@ export class Movement {
     }
 
     left() {
-        const row = this.shape.row;
-        const column = this.shape.column;
+
+        if (!this.canMove) {
+            return;
+        }
+        const { row, column } = this.shape;
+
         this.shape.clear();
 
         const nextNotAvailable = this.validator.checkNext(row, column - 1);
@@ -43,8 +53,12 @@ export class Movement {
     }
 
     right() {
-        const row = this.shape.row;
-        const column = this.shape.column;
+        if (!this.canMove) {
+            return;
+        }
+
+        const { row, column } = this.shape;
+
         this.shape.clear();
 
         const nextNotAvailable = this.validator.checkNext(row, column + 1);
@@ -55,5 +69,22 @@ export class Movement {
 
         this.shape.column++;
         this.shape.draw();
+    }
+
+    rotate() {
+        if (!this.canMove) {
+            return;
+        }
+        const { row, column } = this.shape;
+
+        this.shape.clear();
+        const nextTemplate = this.shape.getTemplate(this.shape.templateIndex + 1);
+        const nextNotAvailable = this.validator.checkNext(row, column, nextTemplate);
+        if (nextNotAvailable) {
+            this.shape.draw();
+            return;
+        }
+
+        this.shape.rotate();
     }
 }

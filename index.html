@@ -1,11 +1,38 @@
 <html>
 
 <head>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="main.js" type="module"></script>
 </head>
 
 <body>
-    <canvas id="canvasId" width="300px" height="600px" style="border: 1px solid;"></canvas>
+    <div id="left">
+        <h1>Tetris</h1>
+    </div>
+
+    <div id="middle">
+        <canvas id="content" width="300px" height="600px"></canvas>
+    </div>
+
+    <div id="right">
+        <span>
+            Lines
+            <p id="lines">0</p>
+        </span>
+
+        <span>
+            Score
+            <p id="score">0</p>
+        </span>
+        <span>
+            Next Shape
+            <canvas id="nextShape" width="150px" height="120px"></canvas>
+        </span>
+        <br/>
+
+        <button id="startGame">Start Game</button>
+    </div>
+
 </body>
 
 </html>

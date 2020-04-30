@@ -1,21 +1,19 @@
 import { Grid } from './grid.js';
-import { Movement } from './shapes/utils/movement.js';
-import { generateNewShape, getRandomInt } from './shapes/utils/shape-generator.js';
+import { Movement } from './utils/movement.js';
+import { generateNewShape, getRandomInt, shapeIndex } from './utils/shape-generator.js';
+import { DOMHelper } from './utils/DOMHelper.js';
 
-const rows = 20;
-const columns = 10;
-
-const grid = new Grid(rows, columns);
-grid.create();
-grid.draw();
-
-let shape = generateNewShape(grid.cells);
-let movement = new Movement(shape, grid.cells);
+const rows = 20,
+    columns = 10,
+    grid = new Grid(rows, columns, 'content'),
+    nextShapeGrid = new Grid(4, 5, 'nextShape')
+    ;
+let tetrisScore = 0, linesNumber = 0, intervalId, nextShapeIndex, nextShape, shape, movement;
 
 document.addEventListener("keydown", event => {
     switch (event.key) {
         case 'ArrowUp':
-            shape.rotate();
+            movement.rotate();
             break;
         case 'ArrowDown':
             movement.down();
@@ -39,18 +37,41 @@ document.addEventListener("keydown", event => {
 
 
 const animate = () => {
-    if(movement.canMove) {
-        movement.down();
+    if (movement && movement.canMove) {
+        movement.down(intervalId);
         console.log('Moving');
     } else {
         console.log('Stopped');
         clearInterval(intervalId);
-        shape = generateNewShape(grid.cells);
+
+        //Score
+        let score = grid.score();
+        if (score > 0) {
+            tetrisScore += score;
+            linesNumber = tetrisScore / 10;
+            DOMHelper.setLines(linesNumber);
+            DOMHelper.setScore(tetrisScore);
+            grid.draw();
+        }
+
+        shape = generateNewShape(grid.cells, nextShapeIndex);
+        nextShapeIndex = shapeIndex();
+        DOMHelper.setBackground(shape.color);
+
+        nextShape && nextShape.clear();
+        nextShape = generateNewShape(nextShapeGrid.cells, nextShapeIndex);
+        nextShape.draw();
+        movement = new Movement(shape, grid.cells);
         intervalId = setInterval(animate, 200);
     }
 }
 
-let intervalId = setInterval(animate, 200);
+document.getElementById('startGame').addEventListener('click', () => {
+    DOMHelper.disableStartButton();
+    grid.create();
+    grid.draw();
+    intervalId = setInterval(animate, 200);
+});
 
 
 

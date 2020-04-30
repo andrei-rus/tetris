@@ -11,8 +11,10 @@ export class Shape {
         for (let row = 0; row < this.template.length; row++) {
             for (let column = 0; column < this.template[row].length; column++) {
                 if (this.template[row][column] === 1) {
-                    this.cells[this.row + row][this.column + column].draw(this.color);
-                    this.cells[this.row + row][this.column + column].isEmpty = false;
+                    const cell = this.cells[this.row + row][this.column + column];
+                    cell.color = this.color;
+                    cell.draw();
+                    cell.isEmpty = false;
                 }
             }
         }
@@ -22,18 +24,24 @@ export class Shape {
         for (let row = 0; row < this.template.length; row++) {
             for (let column = 0; column < this.template[row].length; column++) {
                 if (this.template[row][column] === 1) {
-                    this.cells[this.row + row][this.column + column].draw('#7facf5');
-                    this.cells[this.row + row][this.column + column].isEmpty = true;
+                    const cell = this.cells[this.row + row][this.column + column];
+                    cell.color = 'black';
+                    cell.draw();
+                    cell.isEmpty = true;
                 }
             }
         }
     }
 
     rotate() {
-        this.clear();
-        const length = this.getTemplates().length;
         this.templateIndex++;
-        this.template = this.getTemplates()[this.templateIndex % length];
+        this.template = this.getTemplate(this.templateIndex);
         this.draw();
+    }
+
+    getTemplate(index) {
+        const tmplIndex = index || this.templateIndex;
+        const length = this.getTemplates().length;
+        return this.getTemplates()[tmplIndex % length];
     }
 }
